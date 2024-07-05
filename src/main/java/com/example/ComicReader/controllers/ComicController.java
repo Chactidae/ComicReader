@@ -35,6 +35,7 @@ public class ComicController {
         model.addAttribute("images", book.getImageList());
         return "comics_info";
     }
+
     //@GetMapping("/reset")
     //public String reset(Model model){
      //   model.addAttribute("book", bookService.list(null));
@@ -47,4 +48,18 @@ public class ComicController {
         bookService.saveBook(book, file1, file2, file3);
         return "redirect:/";
     }
+
+    @PostMapping("/book/{id}")
+    public String deleteBook(@PathVariable Long id){
+        bookService.deleteBook(id);
+        return "redirect:/";
+    }
+
+    @PostMapping("/book/{id}/addPage")
+    public String addPageToBook(@PathVariable("id") Long id, @RequestParam("page") MultipartFile page) throws IOException {
+        Book book = bookService.getBookById(id);
+        Book updateBook = bookService.addPage(book, page);
+        return "redirect:/book/" + updateBook.getId(); // Перенаправление на страницу книги
+    }
+
 }

@@ -61,6 +61,18 @@ public class BookService {
         bookFromDb.setPreviewImageId(bookFromDb.getImageList().get(0).getId());
         bookRepository.save(book);
     }
+    public void deleteBook(Long id){
+        bookRepository.deleteById(id);
+    }
+    public Book addPage(Book book, MultipartFile page) throws IOException {
+        if (!page.isEmpty()){
+            Image newPage = toImageEntity(page);
+            book.addImageToBook(newPage);
+            bookRepository.save(book);
+            log.info("Saving new page to Title: {};", book.getTitle());
+        }
+        return book;
+    }
 
     private Image toImageEntity(MultipartFile file1) throws IOException {
         Image image = new Image();
